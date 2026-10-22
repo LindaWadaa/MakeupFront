@@ -1,0 +1,53 @@
+<div class="container">
+    <div>
+        <h2>Ajouter un makeup :</h2>
+    </div>
+    <form>
+        <div hidden class="col-sm-2 col-md-2 col-lg-2">
+            <label>ID Makeup</label>
+            <input  type="text" [(ngModel)]="newMakeup.id" name="idMakeup" class="form-control">
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <label>Nom Makeup</label>
+            <input type="text" [(ngModel)]="newMakeup.nom" name="nomMakeup" class="form-control">
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <label>Prix Makeup</label>
+            <input type="number" [(ngModel)]="newMakeup.price" name="prixMakeup" class="form-control">
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <label>Date d'expiration</label>
+            <input type="date" [(ngModel)]="newMakeup.date_expiration" name="dateExpiration" class="form-control">
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <label>marque</label>
+            <input type="text" [(ngModel)]="newMakeup.marque" name="description" class="form-control">
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <label>Description</label>
+            <input type="text" [(ngModel)]="newMakeup.description" name="description" class="form-control">
+        </div>
+
+
+         <div class="col-sm-4 col-md-4 col-1g-4">
+            <label>Categorie</label>
+            <select class="form-control form-control-1g" id="idCat" name="idCat" [(ngModel)]="newIdCat">
+                @for(cat of categories; track cat.idcat ?? cat.idCat){
+                    <option [ngValue]="cat.idcat ?? cat.idCat">
+                        {{cat.nom ?? cat.nomCat}}
+                    </option>
+                }
+            </select>
+        </div> 
+
+        
+
+        
+        <div class="mt-2">
+            <button type="button" (click)="addMakeup()" class="btn btn-success">Ajouter</button>
+            <div class="alert alert-success" *ngIf="message">
+                {{ message }}
+            </div>
+        </div>
+    </form>
+</div>

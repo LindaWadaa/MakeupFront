@@ -1,0 +1,52 @@
+<div class="container">
+  <h2>Rechercher les makeups par catégorie</h2>
+
+  <div class="col-sm-4 col-md-4 col-lg-4 mb-3">
+    <label for="idCategorie">Catégories</label>
+    <select
+      id="idCategorie"
+      name="idCategorie"
+      class="form-control"
+      [(ngModel)]="idCategorie"
+      (ngModelChange)="onChange()"
+    >
+      <option [ngValue]="undefined">-- Choisir une catégorie --</option>
+      @for (cat of categories; track cat.idcat ?? cat.idCat) {
+        <option [ngValue]="cat.idcat ?? cat.idCat">
+          {{ cat.nom ?? cat.nomCat }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="message">{{ message }}</div>
+
+  <table class="table table-striped" *ngIf="idCategorie !== undefined">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Nom</th>
+        <th>Description</th>
+        <th>Prix</th>
+        <th>Date expiration</th>
+        <th>Catégorie</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (produit of produits; track produit.id) {
+        <tr>
+          <td>{{ produit.id }}</td>
+          <td>{{ produit.nom }}</td>
+          <td>{{ produit.description }}</td>
+          <td>{{ produit.price }}</td>
+          <td>{{ formatDate(produit) }}</td>
+          <td>{{ categoryName(produit.categorie) }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6">Aucun makeup dans cette catégorie.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
