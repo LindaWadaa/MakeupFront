@@ -21,21 +21,17 @@
 
         </div>
         <div class="col-sm-4 col-md-4 col-lg-4">
-            <label>marque</label>
-            <input type="text" [(ngModel)]="currentMakeup.marque" name="description" class="form-control">
-        </div>
-        <div class="col-sm-4 col-md-4 col-lg-4">
             <label>Description</label>
             <input type="text" [(ngModel)]="currentMakeup.description" name="description" class="form-control">
         </div>
 
 
         <div class="col-sm-4 col-md-4 col-1g-4">
-            <label>Categorie</label>
-            <select class="form-control form-control-1g" id="idCat" name="idCat" [(ngModel)]="updatedCatId">
-                @for(cat of categories; track cat.idcat ?? cat.idCat){
-                    <option [ngValue]="cat.idcat ?? cat.idCat">
-                        {{cat.nom ?? cat.nomCat}}
+            <label>Marque</label>
+            <select class="form-control form-control-1g" id="idMarque" name="idMarque" [(ngModel)]="updatedMarqueId">
+                @for(marque of marques; track marque.id ?? marque.idMarque ?? marque.idmarque){
+                    <option [ngValue]="marque.id ?? marque.idMarque ?? marque.idmarque">
+                        {{marque.nom ?? marque.nomMarque ?? marque.nommarque}}
                     </option>
                 }
             </select>

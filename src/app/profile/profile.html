@@ -1,0 +1,5 @@
+<div class="container mt-4">
+  <h2>Mon profil</h2>
+  <p><strong>Utilisateur :</strong> {{ authService.loggedUser }}</p>
+  <p><strong>Rôle :</strong> {{ authService.roles?.join(', ') }}</p>
+</div>

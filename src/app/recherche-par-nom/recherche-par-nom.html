@@ -1,0 +1,46 @@
+ <div class="container">
+  <div class="row g-2 mb-3">
+    <div class="col-sm-6 col-md-5">
+      <label for="searchTerm">Nom Produit en tapant</label>
+      <input
+        id="searchTerm"
+        name="searchTerm"
+        type="text"
+        class="form-control"
+        [(ngModel)]="searchTerm"
+        (keyup)="onKeyUp(searchTerm)"
+      >
+    </div>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="message">{{ message }}</div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Nom</th>
+        <th>Description</th>
+        <th>Prix</th>
+        <th>Date expiration</th>
+        <th>Marque</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (produit of produits | searchFilter: searchTerm; track produit.id) {
+        <tr>
+          <td>{{ produit.id }}</td>
+          <td>{{ produit.nom }}</td>
+          <td>{{ produit.description }}</td>
+          <td>{{ produit.price }}</td>
+          <td>{{ formatDate(produit) }}</td>
+          <td>{{ marqueName(produit.marque) }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6">Aucun makeup trouvé.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,42 +1,42 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Categorie } from '../model/categorie.model';
+import { Marque } from '../model/marque.model';
 import { Makeup } from '../model/makeup.model';
 import { Makeup as MakeupService } from '../services/makeup';
 
 @Component({
-  selector: 'app-recherche-par-categorie',
+  selector: 'app-recherche-par-marque',
   imports: [CommonModule, FormsModule],
-  templateUrl: './recherche-par-categorie.html',
+  templateUrl: './recherche-par-marque.html',
   styleUrl: '../makeups/makeups.css',
 })
-export class RechercheParCategorie implements OnInit {
+export class RechercheParMarque implements OnInit {
   produits: Makeup[] = [];
-  categories: Categorie[] = [];
-  idCategorie?: number;
+  marques: Marque[] = [];
+  idMarque?: number;
   message = '';
 
   constructor(private makeupService: MakeupService) {}
 
   ngOnInit(): void {
-    this.makeupService.listeCategories().subscribe({
-      next: cats => {
-        this.categories = cats;
+    this.makeupService.listeMarques().subscribe({
+      next: marques => {
+        this.marques = marques;
       },
       error: () => {
-        this.message = 'Impossible de charger les catégories.';
+        this.message = 'Impossible de charger les marques.';
       },
     });
   }
 
   onChange(): void {
-    if (this.idCategorie === undefined) {
+    if (this.idMarque === undefined) {
       this.produits = [];
       return;
     }
 
-    this.makeupService.rechercherParCategorie(this.idCategorie).subscribe({
+    this.makeupService.rechercherParMarque(this.idMarque).subscribe({
       next: produits => {
         this.produits = produits;
         this.message = '';
@@ -53,7 +53,12 @@ export class RechercheParCategorie implements OnInit {
     return date ? String(date).substring(0, 10) : '-';
   }
 
-  categoryName(categorie: Categorie | undefined): string {
-    return categorie?.nom ?? categorie?.nomCat ?? 'PAS DE CATEGORIE';
+  marqueName(marque: Marque | undefined): string {
+    return marque?.nom
+      ?? marque?.nomMarque
+      ?? marque?.nommarque
+      ?? (marque?.id ?? marque?.idMarque ?? marque?.idmarque
+        ? `Marque ${marque.id ?? marque.idMarque ?? marque.idmarque}`
+        : 'PAS DE MARQUE');
   }
 }

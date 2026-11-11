@@ -1,0 +1,39 @@
+<div class="container mt-5">
+  <div class="row justify-content-md-center">
+    <div class="col-md-4">
+      @if (erreur) {
+        <div class="alert alert-danger">
+          Login ou mot de passe incorrect.
+        </div>
+      }
+
+      <form (ngSubmit)="onLoggedin()">
+        <div class="mb-3">
+          <label for="username">Nom utilisateur</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            class="form-control"
+            [(ngModel)]="user.username"
+            required
+          >
+        </div>
+        <div class="mb-3">
+          <label for="password">Mot de passe</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            class="form-control"
+            [(ngModel)]="user.password"
+            required
+          >
+        </div>
+        <button type="submit" class="btn btn-primary">Connexion</button>
+      </form>
+
+      <p class="mt-3 mb-0">Utilisez un compte créé avec l'API backend.</p>
+    </div>
+  </div>
+</div>

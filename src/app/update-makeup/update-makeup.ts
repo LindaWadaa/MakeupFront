@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Makeup } from '../model/makeup.model';
 import { Makeup as MakeupService } from '../services/makeup';
-import { Categorie } from '../model/categorie.model';
+import { Marque } from '../model/marque.model';
 
 @Component({
   selector: 'app-update-makeup',
@@ -17,8 +17,8 @@ export class UpdateMakeup implements OnInit {
   message = '';
   currentMakeup: Makeup = new Makeup();
   dateExpiration = '';
-  categories: Categorie[] = [];
-  updatedCatId?: number;
+  marques: Marque[] = [];
+  updatedMarqueId?: number;
 
   constructor(private activatedRoute: ActivatedRoute,private router: Router,
   private makeupService: MakeupService){
@@ -34,9 +34,11 @@ export class UpdateMakeup implements OnInit {
     };
     delete makeupToUpdate.date_expiration;
 
-    const categorie = this.categories.find(cat => (cat.idCat ?? cat.idcat) === this.updatedCatId);
-    if (categorie) {
-      makeupToUpdate.categorie = categorie;
+    const marque = this.marques.find(
+      item => (item.id ?? item.idMarque ?? item.idmarque) === this.updatedMarqueId,
+    );
+    if (marque) {
+      makeupToUpdate.marque = marque;
     }
 
     this.makeupService.updateMakeup(makeupToUpdate).subscribe({
@@ -51,13 +53,12 @@ export class UpdateMakeup implements OnInit {
 
   
   ngOnInit(): void {
-    this.makeupService.listeCategories().subscribe(
-      cats => {
-        this.categories = cats;
-        console.log(cats);
+    this.makeupService.listeMarques().subscribe(
+      marques => {
+        this.marques = marques;
       },
       () => {
-        this.message = "Impossible de charger les catégories.";
+        this.message = "Impossible de charger les marques.";
       },
     );
     const idParam = this.activatedRoute.snapshot.paramMap.get('id');
@@ -70,7 +71,8 @@ export class UpdateMakeup implements OnInit {
     this.makeupService.consulterMakeup(id).subscribe({
       next: (makeup) => {
         this.currentMakeup = makeup;
-        this.updatedCatId = makeup.categorie?.idCat ?? makeup.categorie?.idcat;
+        this.updatedMarqueId =
+          makeup.marque?.id ?? makeup.marque?.idMarque ?? makeup.marque?.idmarque;
         this.dateExpiration = this.formatDateForInput(
           makeup.date_expiration ?? makeup.dateExpiration,
         );

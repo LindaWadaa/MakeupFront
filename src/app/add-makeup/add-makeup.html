@@ -17,11 +17,7 @@
         </div>
         <div class="col-sm-4 col-md-4 col-lg-4">
             <label>Date d'expiration</label>
-            <input type="date" [(ngModel)]="newMakeup.date_expiration" name="dateExpiration" class="form-control">
-        </div>
-        <div class="col-sm-4 col-md-4 col-lg-4">
-            <label>marque</label>
-            <input type="text" [(ngModel)]="newMakeup.marque" name="description" class="form-control">
+            <input type="date" [(ngModel)]="newMakeup.dateExpiration" name="dateExpiration" class="form-control">
         </div>
         <div class="col-sm-4 col-md-4 col-lg-4">
             <label>Description</label>
@@ -30,11 +26,11 @@
 
 
          <div class="col-sm-4 col-md-4 col-1g-4">
-            <label>Categorie</label>
-            <select class="form-control form-control-1g" id="idCat" name="idCat" [(ngModel)]="newIdCat">
-                @for(cat of categories; track cat.idcat ?? cat.idCat){
-                    <option [ngValue]="cat.idcat ?? cat.idCat">
-                        {{cat.nom ?? cat.nomCat}}
+            <label>Marque</label>
+            <select class="form-control form-control-1g" id="idMarque" name="idMarque" [(ngModel)]="newIdMarque">
+                @for(marque of marques; track marque.id ?? marque.idMarque ?? marque.idmarque){
+                    <option [ngValue]="marque.id ?? marque.idMarque ?? marque.idmarque">
+                        {{marque.nom ?? marque.nomMarque ?? marque.nommarque}}
                     </option>
                 }
             </select>

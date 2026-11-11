@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" routerLink="/makeups">Gestion des Makeups</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -26,21 +26,49 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Makeup
+            Makeups
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" routerLink="/add-makeup">Ajouter</a></li>
-            <li><a class="dropdown-item" href="#">Lister</a></li>
-            <li> <a class="dropdown-item" routerLink="/rechercheParCategorie" >Recherche Par
-Catégorie</a></li>
+            @if (authService.isAdmin()) {
+              <li><a class="dropdown-item" routerLink="/add-makeup">Ajouter</a></li>
+            }
+            <li><a class="dropdown-item" routerLink="/makeups">Lister</a></li>
+            <li><a class="dropdown-item" routerLink="/rechercheParMarque">Recherche Par Marque</a></li>
+            @if (authService.isAdmin()) {
+              <li><a class="dropdown-item" routerLink="/listeMarques">Gestion des marques</a></li>
+            }
+            <li><a class="dropdown-item" routerLink="/rechercheParNom">Recherche Par Nom</a></li>
           </ul>
         </li>
-        
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        @if (authService.isloggedIn) {
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              [{{ authService.loggedUser }}]
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <button type="button" class="dropdown-item" (click)="onLogout()">Logout</button>
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/profile">Profile</a>
+              </li>
+            </ul>
+          </li>
+        } @else {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login">Login</a>
+          </li>
+        }
+      </ul>
     </div>
   </div>
 </nav>

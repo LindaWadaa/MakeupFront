@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Makeup } from '../model/makeup.model';
 import { Makeup as MakeupService } from '../services/makeup';
+import { AuthService } from '../services/auth';
 
 @Component({
   selector: 'app-makeups',
@@ -51,14 +52,17 @@ export class Makeups {
     if (conf && m.id !== undefined)
     this.makeupService.supprimerMakeup(m.id).subscribe(() =>{
     console.log("makeup supprimé");
-    //this.chargeMakeup();
-    this.router.navigate(['produits']);});
+    this.chargeMakeup();});
 }
 
 
 
 
-  constructor(private makeupService: MakeupService, private router: Router)  {
+  constructor(
+    private makeupService: MakeupService,
+    private router: Router,
+    public authService: AuthService,
+  )  {
     //this.makeups = this.MakeupService.listeMakeups();
   }
 

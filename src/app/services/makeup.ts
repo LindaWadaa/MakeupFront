@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Makeup as MakeupModel } from '../model/makeup.model';
-import { Categorie } from '../model/categorie.model';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Marque } from '../model/marque.model';
+import { map, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-};
-
-
 
 @Injectable({
   providedIn: 'root',
@@ -18,99 +12,110 @@ export class Makeup {
 
   apiURL = environment.apiURL;
   makeups!: MakeupModel[];
+  private readonly marquesOfficielles: Record<number, Marque> = {
+    1: { id: 1, nom: 'Dior', description: 'Marque française de maquillage' },
+    2: { id: 2, nom: 'Essence', description: 'Marque de maquillage accessible' },
+    3: { id: 3, nom: 'Chanel', description: 'Maison française de luxe' },
+    4: { id: 4, nom: 'Maybelline', description: 'Marque de maquillage' },
+    5: { id: 5, nom: 'MAC', description: 'Marque professionnelle de maquillage' },
+    6: { id: 6, nom: 'Huda Beauty', description: 'Marque de maquillage' },
+    7: { id: 7, nom: "L'Oreal Paris", description: 'Marque de beauté' },
+    8: { id: 8, nom: 'Fenty Beauty', description: 'Marque de maquillage' },
+    9: { id: 9, nom: 'NARS', description: 'Marque de maquillage' },
+    10: {
+      id: 10,
+      nom: 'Anastasia Beverly Hills',
+      description: 'Marque de maquillage',
+    },
+  };
 
-  //categories: Categorie[];
-
-  constructor(private http: HttpClient) {
-    //console.log('creation du service makeup!');
-
-
-    /* this.categories = [
-      {idCat: 1, nomCat: 'Rouge à lèvres', descriptionCat: 'Rouge à lèvres rouge'},
-      {idCat: 2, nomCat: 'Fond de teint', descriptionCat: 'Fond de teint liquide'},
-      {idCat: 3, nomCat: 'Mascara', descriptionCat: 'Mascara volumisant'},
-      {idCat: 4, nomCat: 'Blush', descriptionCat: 'Blush poudre rose'},
-      {idCat: 5, nomCat: 'Eyeliner', descriptionCat: 'Eyeliner liquide noir'},
-    ]; */
-
-   /* this.makeups = [
-      {id: 1, nom: 'Rouge à lèvres', description: 'Rouge à lèvres rouge', price: 15.99, marque: 1, date_expiration: new Date('2025-12-31')},
-      {id: 2, nom: 'Fond de teint', description: 'Fond de teint liquide', price: 29.99, marque: 2, date_expiration: new Date('2024-06-30')},
-      {id: 3, nom: 'Mascara', description: 'Mascara volumisant', price: 19.99, marque: 1, date_expiration: new Date('2023-09-30')},
-      {id: 4, nom: 'Blush', description: 'Blush poudre rose', price: 12.99, marque: 3, date_expiration: new Date('2025-03-31')},
-      {id: 5, nom: 'Eyeliner', description: 'Eyeliner liquide noir', price: 14.99, marque: 2, date_expiration: new Date('2024-11-30')},
-    ];*/
-  }
-
-
-
+  constructor(private http: HttpClient) {}
 
   listeMakeup(): Observable<MakeupModel[]>{
-    return this.http.get<MakeupModel[]>(`${this.apiURL}/all`);
+    return this.http.get<MakeupModel[]>(`${this.apiURL}/allmakeups`).pipe(
+      map(makeups => makeups.map(makeup => this.normaliserMakeup(makeup))),
+    );
   }
-
-  
-
-
 
   ajouterMakeup( makeup: MakeupModel) :Observable<MakeupModel>{
-    return this.http.post<MakeupModel>(this.apiURL, makeup, httpOptions);
+    return this.http.post<MakeupModel>(`${this.apiURL}/addmakeup`, makeup);
   }
-
-
 
   getMakeup(id: number): MakeupModel | undefined {
     return this.makeups.find(makeup => makeup.id === id);
   }
 
-
-
-
-
-
   consulterMakeup(id: number): Observable<MakeupModel> {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.get<MakeupModel>(url);
-}
-
-
-
-
-
-
+    const url = `${this.apiURL}/getmakeup/${id}`;
+    return this.http.get<MakeupModel>(url).pipe(
+      map(makeup => this.normaliserMakeup(makeup)),
+    );
+  }
 
   updateMakeup(makeup: MakeupModel): Observable<MakeupModel>
   {
-  return this.http.put<MakeupModel>(this.apiURL, makeup, httpOptions);
-
+    return this.http.put<MakeupModel>(`${this.apiURL}/updatemakeup`, makeup);
   }
-
 
   supprimerMakeup(id : number) {
-    const url = `${this.apiURL}/${id}`;
-    return this.http.delete(url, httpOptions);
-}
-
-
-
-
-
-
-
-  listeCategories(): Observable<Categorie[]> {
-    return this.http.get<Categorie[]>(`${this.apiURL}/cat`);
+    const url = `${this.apiURL}/deletemakeup/${id}`;
+    return this.http.delete(url);
   }
 
-  rechercherParCategorie(idCat: number): Observable<MakeupModel[]> {
-    const url = `${this.apiURL}/prodscat/${idCat}`;
-    return this.http.get<MakeupModel[]>(url);
+  listeMarques(): Observable<Marque[]> {
+    return this.http.get<Marque[]>(`${this.apiURL}/marque/all`).pipe(
+      map(marques => marques.map(marque => this.normaliserMarque(marque))),
+    );
   }
 
-/*consulterCategorie(id:number): Categorie{
+  ajouterMarque(marque: Marque): Observable<Marque> {
+    return this.http.post<Marque>(`${this.apiURL}/marque/add`, marque);
+  }
 
-  return this.categories.find(cat => cat.idCat == id) !;
-} */
+  modifierMarque(marque: Marque): Observable<Marque> {
+    return this.http.put<Marque>(`${this.apiURL}/marque/update`, marque);
+  }
 
+  private normaliserMarque(marque: Marque): Marque {
+    const id = marque.id ?? marque.idMarque ?? marque.idmarque;
+    const officielle = id === undefined ? undefined : this.marquesOfficielles[id];
 
+    return {
+      ...marque,
+      id,
+      nom: marque.nom ?? marque.nomMarque ?? marque.nommarque ?? officielle?.nom,
+      description:
+        marque.description ??
+        marque.descriptionMarque ??
+        marque.descriptionmarque ??
+        officielle?.description,
+    };
+  }
+
+  rechercherParMarque(idMarque: number): Observable<MakeupModel[]> {
+    const url = `${this.apiURL}/getmakeupbymarque/${idMarque}`;
+    return this.http.get<MakeupModel[]>(url).pipe(
+      map(makeups =>
+        makeups.map(makeup => ({
+          ...makeup,
+          marque: makeup.marque ? this.normaliserMarque(makeup.marque) : undefined,
+        })),
+      ),
+    );
+  }
+
+  rechercherParNom(nom: string): Observable<MakeupModel[]> {
+    const url = `${this.apiURL}/getmakeupbyname/${encodeURIComponent(nom)}`;
+    return this.http.get<MakeupModel[]>(url).pipe(
+      map(makeups => makeups.map(makeup => this.normaliserMakeup(makeup))),
+    );
+  }
+
+  private normaliserMakeup(makeup: MakeupModel): MakeupModel {
+    return {
+      ...makeup,
+      marque: makeup.marque ? this.normaliserMarque(makeup.marque) : undefined,
+    };
+  }
 
 }

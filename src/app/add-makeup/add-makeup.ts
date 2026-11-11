@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import { Makeup } from '../model/makeup.model';
 import { Makeup as MakeupService } from '../services/makeup';
-import { Categorie } from '../model/categorie.model';
+import { Marque } from '../model/marque.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,8 +18,8 @@ export class AddMakeup implements OnInit {
   message = "";
   newMakeup: Makeup = new Makeup();
 
-  categories: Categorie[] = [];
-  newIdCat?: number;
+  marques: Marque[] = [];
+  newIdMarque?: number;
   
   constructor(private MakeupService: MakeupService,
               private router: Router) {
@@ -27,15 +27,14 @@ export class AddMakeup implements OnInit {
 
   ngOnInit(): void {
 
-  this.MakeupService.listeCategories().
-   subscribe(cats => {this.categories = cats; 
-                      console.log(cats); 
+  this.MakeupService.listeMarques().
+   subscribe(marques => {this.marques = marques;
   }); 
 }
 
 addMakeup(){
- this.newMakeup.categorie = this.categories.find(
-   cat => (cat.idCat ?? cat.idcat) === this.newIdCat,
+ this.newMakeup.marque = this.marques.find(
+   marque => (marque.id ?? marque.idMarque ?? marque.idmarque) === this.newIdMarque,
  )!;
     this.MakeupService.ajouterMakeup(this.newMakeup) 
                       .subscribe(prod => { 

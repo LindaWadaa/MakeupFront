@@ -12,9 +12,8 @@
                     <th>Nom</th>
                     <th>description</th>
                     <th>Prix</th>
-                    <th>Marque</th>
                     <th>Date expiration</th>
-                     <th>Categorie</th> 
+                     <th>Marque</th>
                     <th>Actions</th>
                 </thead>}
 
@@ -32,15 +31,16 @@
                         <td>{{makeup.nom}}</td>
                         <td>{{makeup.description}}</td>
                         <td>{{makeup.price}}</td>
-                        <td>{{makeup.marque}}</td>
                         <td>{{ formatDate(makeup) }}</td>
-                         <td>{{makeup.categorie?.nom ?? makeup.categorie?.nomCat}}</td>
-                        <td>
-                            <a (click)="supprimerMakeup(makeup)" class="btn btn-danger btn-sm">Suaprimer</a>
-                        </td>
-                        <td>
-                            <a [routerLink]="['/update-makeup', makeup.id]" class="btn btn-primary btn-sm">Modifier</a>
-                        </td>
+                         <td>{{makeup.marque?.nom ?? makeup.marque?.nomMarque ?? makeup.marque?.nommarque ?? 'PAS DE MARQUE'}}</td>
+                        @if (authService.isAdmin()) {
+                            <td>
+                                <a (click)="supprimerMakeup(makeup)" class="btn btn-danger btn-sm">Supprimer</a>
+                            </td>
+                            <td>
+                                <a [routerLink]="['/update-makeup', makeup.id]" class="btn btn-primary btn-sm">Modifier</a>
+                            </td>
+                        }
                     </tr>
                 </tbody>
                 @if(last)
