@@ -10,11 +10,14 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class AuthService {
+  baseURL: string = environment.baseURL;
   apiURL: string = environment.authURL;
+  authApiURL: string = environment.authApiURL;
   token = '';
   loggedUser?: string;
   roles?: string[];
   isloggedIn = false;
+  regitredUser: User = new User();
 
   private helper = new JwtHelperService();
   private readonly tokenKey = 'jwt';
@@ -25,7 +28,40 @@ export class AuthService {
 
   login(user: User): Observable<HttpResponse<User>> {
     const credentials = { username: user.username, password: user.password };
-    return this.http.post<User>(this.apiURL, credentials, { observe: 'response' });
+    return this.http.post<User>(this.baseURL + '/login', credentials, { observe: 'response' });
+  }
+
+  registerUser(user: User): Observable<HttpResponse<User>> {
+    const payload = {
+      username: user.username,
+      email: user.email,
+      password: user.password,
+    };
+    return this.http.post<User>(this.baseURL + '/register', payload, { observe: 'response' });
+  }
+
+  validateEmail(code: string): Observable<User> {
+    return this.http.get<User>(this.baseURL + '/verifyEmail/' + code);
+  }
+
+  setRegistredUser(user: User): void {
+    this.regitredUser = user;
+  }
+
+  getRegistredUser(): User {
+    return this.regitredUser;
+  }
+
+  register(user: User): Observable<string> {
+    return this.http.post(this.authApiURL + '/register', user, { responseType: 'text' });
+  }
+
+  verifEmail(email: string, code: string): Observable<string> {
+    return this.http.post(this.authApiURL + '/verifyEmail', { email, code }, { responseType: 'text' });
+  }
+
+  resendCode(email: string): Observable<string> {
+    return this.http.post(this.authApiURL + '/resendCode', { email }, { responseType: 'text' });
   }
 
   saveToken(jwt: string): void {

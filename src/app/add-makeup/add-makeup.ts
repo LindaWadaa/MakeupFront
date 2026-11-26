@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import { Makeup } from '../model/makeup.model';
+import { Image } from '../model/image.model';
 import { Makeup as MakeupService } from '../services/makeup';
 import { Marque } from '../model/marque.model';
 import { Router } from '@angular/router';
@@ -20,6 +21,8 @@ export class AddMakeup implements OnInit {
 
   marques: Marque[] = [];
   newIdMarque?: number;
+  uploadedImage!: File;
+  imagePath: any;
   
   constructor(private MakeupService: MakeupService,
               private router: Router) {
@@ -32,15 +35,38 @@ export class AddMakeup implements OnInit {
   }); 
 }
 
+onImageUpload(event: any) {
+  this.uploadedImage = event.target.files[0];
+  var reader = new FileReader();
+  reader.readAsDataURL(this.uploadedImage);
+  reader.onload = (_event) => { this.imagePath = reader.result; }
+}
+
 addMakeup(){
  this.newMakeup.marque = this.marques.find(
    marque => (marque.id ?? marque.idMarque ?? marque.idmarque) === this.newIdMarque,
  )!;
-    this.MakeupService.ajouterMakeup(this.newMakeup) 
-                      .subscribe(prod => { 
-                      console.log(prod); 
-                      this.router.navigate(['makeups']); 
-                      }); 
+ if (this.uploadedImage) {
+   this.MakeupService
+     .uploadImage(this.uploadedImage, this.uploadedImage.name)
+     .subscribe((img: Image) => {
+       this.newMakeup.image = img;
+       this.MakeupService.ajouterMakeup(this.newMakeup).subscribe((prod) => {
+         if (this.uploadedImage && prod.id) {
+           this.MakeupService.uploadImageFS(this.uploadedImage, this.uploadedImage.name, prod.id).subscribe(() => {
+             this.router.navigate(['makeups']);
+           });
+         } else {
+           this.router.navigate(['makeups']);
+         }
+       });
+     });
+ } else {
+   this.MakeupService.ajouterMakeup(this.newMakeup).subscribe(prod => {
+     console.log(prod);
+     this.router.navigate(['makeups']);
+   });
+ }
 }
 
 }

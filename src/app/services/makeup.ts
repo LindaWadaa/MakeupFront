@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Makeup as MakeupModel } from '../model/makeup.model';
 import { Marque } from '../model/marque.model';
+import { Image } from '../model/image.model';
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -109,6 +110,37 @@ export class Makeup {
     return this.http.get<MakeupModel[]>(url).pipe(
       map(makeups => makeups.map(makeup => this.normaliserMakeup(makeup))),
     );
+  }
+
+  uploadImage(file: File, filename: string): Observable<Image> {
+    const imageFormData = new FormData();
+    imageFormData.append('image', file, filename);
+    const url = `${this.apiURL}/image/upload`;
+    return this.http.post<Image>(url, imageFormData);
+  }
+
+  loadImage(id: number): Observable<Image> {
+    const url = `${this.apiURL}/image/get/info/${id}`;
+    return this.http.get<Image>(url);
+  }
+
+  uploadImageProd(file: File, filename: string, idProd: number): Observable<Image> {
+    const imageFormData = new FormData();
+    imageFormData.append('image', file, filename);
+    const url = `${this.apiURL}/image/uplaodImageProd/${idProd}`;
+    return this.http.post<Image>(url, imageFormData);
+  }
+
+  supprimerImage(id: number) {
+    const url = `${this.apiURL}/image/delete/${id}`;
+    return this.http.delete(url);
+  }
+
+  uploadImageFS(file: File, filename: string, idProd: number): Observable<any> {
+    const imageFormData = new FormData();
+    imageFormData.append('image', file, filename);
+    const url = `${this.apiURL}/image/uploadFS/${idProd}`;
+    return this.http.post(url, imageFormData);
   }
 
   private normaliserMakeup(makeup: MakeupModel): MakeupModel {

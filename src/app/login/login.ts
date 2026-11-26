@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { User } from '../model/user.model';
 import { AuthService } from '../services/auth';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './login.html',
 })
 export class Login implements OnInit {
   user = new User();
   erreur = false;
+  errorMessage = '';
+  message = 'login ou mot de passe erronés..';
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -23,6 +25,7 @@ export class Login implements OnInit {
 
   onLoggedin(): void {
     this.erreur = false;
+    this.errorMessage = '';
     this.authService.login(this.user).subscribe({
       next: (data) => {
         const jwToken =
@@ -32,8 +35,14 @@ export class Login implements OnInit {
         this.authService.saveToken(jwToken);
         this.router.navigate(['/makeups']);
       },
-      error: () => {
+      error: (err: any) => {
         this.erreur = true;
+        if (err?.error?.errorCause === 'disabled') {
+          this.message = 'Utilisateur désactivé, Veuillez contacter votre Administrateur';
+        } else {
+          this.message = err?.error?.message ?? err?.error?.error ?? 'login ou mot de passe erronés..';
+        }
+        this.errorMessage = this.message;
       },
     });
   }

@@ -14,6 +14,7 @@
                     <th>Prix</th>
                     <th>Date expiration</th>
                      <th>Marque</th>
+                     <th>Image</th>
                     <th>Actions</th>
                 </thead>}
 
@@ -33,6 +34,7 @@
                         <td>{{makeup.price}}</td>
                         <td>{{ formatDate(makeup) }}</td>
                          <td>{{makeup.marque?.nom ?? makeup.marque?.nomMarque ?? makeup.marque?.nommarque ?? 'PAS DE MARQUE'}}</td>
+                         <td><img class="card-img-top img-responsive" [src]="makeup.imageStr" style="height :50px;width:100px"></td>
                         @if (authService.isAdmin()) {
                             <td>
                                 <a (click)="supprimerMakeup(makeup)" class="btn btn-danger btn-sm">Supprimer</a>

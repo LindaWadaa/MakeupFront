@@ -6,6 +6,8 @@ import { RechercheParMarque } from './recherche-par-marque/recherche-par-marque'
 import { RechercheParNom } from './recherche-par-nom/recherche-par-nom';
 import { ListeMarques } from './liste-marques/liste-marques';
 import { Login } from './login/login';
+import { Register } from './register/register';
+import { VerifEmail } from './verif-email/verif-email';
 import { Forbidden } from './forbidden/forbidden';
 import { adminGuard } from './guards/admin.guard';
 import { Profile } from './profile/profile';
@@ -18,6 +20,8 @@ export const routes: Routes = [
   { path: 'rechercheParNom', component: RechercheParNom },
   { path: 'listeMarques', component: ListeMarques, canActivate: [adminGuard] },
   { path: 'login', component: Login },
+  { path: 'register', component: Register },
+  { path: 'verifEmail', component: VerifEmail },
   { path: 'forbidden', component: Forbidden },
   { path: 'profile', component: Profile },
   {path: '', redirectTo: '/makeups', pathMatch: 'full' }

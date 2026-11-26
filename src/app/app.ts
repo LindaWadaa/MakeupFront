@@ -16,7 +16,11 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     this.authService.loadToken();
-    if (!this.authService.getToken() || this.authService.isTokenExpired()) {
+    const publicRoutes = ['/login', '/register', '/verifEmail'];
+    if (
+      !publicRoutes.includes(this.router.url) &&
+      (!this.authService.getToken() || this.authService.isTokenExpired())
+    ) {
       this.router.navigate(['/login']);
     }
   }

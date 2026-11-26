@@ -1,0 +1,30 @@
+<div class="container mt-5">
+  <div class="row justify-content-md-center">
+    <div class="col-md-4">
+      @if (err) {
+        <div class="alert alert-danger">
+          <strong>{{ err }}</strong>
+        </div>
+      }
+
+      @if (loading) {
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+      }
+
+      <form>
+        <div class="txt_field">
+          <label for="code">Veuillez entrer le code envoyé par mail</label>
+          <input id="code" type="text" name="code" [(ngModel)]="code" class="form-control"
+            placeholder="code de confirmation" maxlength="6">
+        </div>
+        <button type="button" class="btn btn-success mt-3" [disabled]="loading" (click)="onValidateEmail()">
+          Valider
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 
 import { AddMakeup } from './add-makeup';
 
@@ -8,7 +11,8 @@ describe('AddMakeup', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddMakeup]
+      imports: [AddMakeup],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
     })
     .compileComponents();
 

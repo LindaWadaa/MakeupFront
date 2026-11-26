@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Makeup } from '../model/makeup.model';
+import { Image } from '../model/image.model';
 import { Makeup as MakeupService } from '../services/makeup';
 import { AuthService } from '../services/auth';
 
@@ -24,8 +25,18 @@ export class Makeups {
 
   chargeMakeup(){
     this.makeupService.listeMakeup().subscribe(makeups => {
-    console.log(makeups);
-    this.makeups = makeups;
+      this.makeups = makeups;
+      this.makeups.forEach((prod) => {
+        if (prod.image?.idImage) {
+          this.makeupService.loadImage(prod.image.idImage).subscribe((img: Image) => {
+            prod.imageStr = 'data:' + img.type + ';base64,' + img.image;
+          });
+        } else if (prod.imagePath && prod.id) {
+          prod.imageStr = this.makeupService.apiURL + '/image/loadfromFS/' + prod.id;
+        } else if (prod.images && prod.images.length > 0) {
+          prod.imageStr = 'data:' + prod.images[0].type + ';base64,' + prod.images[0].image;
+        }
+      });
     });
   }
 

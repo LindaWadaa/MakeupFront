@@ -24,6 +24,14 @@
             <input type="text" [(ngModel)]="newMakeup.description" name="description" class="form-control">
         </div>
 
+        <div class="col-sm-16 col-md-16 col-lg-16">
+            <label class="mb-2">Image :</label>
+            <input type="file" (change)="onImageUpload($event)" name="logo" class="form-control">
+        </div>
+        <div class="col-sm-16 col-md-16 col-lg-16">
+            <img [src]="imagePath" class="card-img-top img-fluid rounded-start" style="width: 500px; height: 300px" />
+        </div>
+
 
          <div class="col-sm-4 col-md-4 col-1g-4">
             <label>Marque</label>
